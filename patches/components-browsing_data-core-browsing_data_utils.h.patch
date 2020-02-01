@@ -1,0 +1,13 @@
+diff --git a/components/browsing_data/core/browsing_data_utils.h b/components/browsing_data/core/browsing_data_utils.h
+index 312262adb03cc73465bee03210f2fde60e015430..b306ce9ad7a882427661230fbe80ec45f509c81c 100644
+--- a/components/browsing_data/core/browsing_data_utils.h
++++ b/components/browsing_data/core/browsing_data_utils.h
+@@ -29,6 +29,8 @@ enum class BrowsingDataType {
+   // Only for Desktop:
+   DOWNLOADS,
+   HOSTED_APPS_DATA,
++  // TODO(simonhong): Use define.
++  SHIELDS_SETTINGS,
+   NUM_TYPES
+ };
+ 

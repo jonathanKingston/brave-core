@@ -1,0 +1,31 @@
+diff --git a/components/browsing_data/core/browsing_data_utils.cc b/components/browsing_data/core/browsing_data_utils.cc
+index df660844a7fe0632a7e3e506573f1237cf684bd6..ef14ac75d49fd71641e39b2183cb221528900889 100644
+--- a/components/browsing_data/core/browsing_data_utils.cc
++++ b/components/browsing_data/core/browsing_data_utils.cc
+@@ -283,6 +283,7 @@ bool GetDeletionPreferenceFromDataType(
+       case BrowsingDataType::FORM_DATA:
+       case BrowsingDataType::BOOKMARKS:
+       case BrowsingDataType::SITE_SETTINGS:
++      case BrowsingDataType::SHIELDS_SETTINGS:
+       case BrowsingDataType::DOWNLOADS:
+       case BrowsingDataType::HOSTED_APPS_DATA:
+         return false;  // No corresponding preference on basic tab.
+@@ -321,6 +322,9 @@ bool GetDeletionPreferenceFromDataType(
+     case BrowsingDataType::HOSTED_APPS_DATA:
+       *out_pref = prefs::kDeleteHostedAppsData;
+       return true;
++    case BrowsingDataType::SHIELDS_SETTINGS:
++      *out_pref = prefs::kDeleteShieldsSettings;
++      return true;
+     case BrowsingDataType::NUM_TYPES:
+       NOTREACHED();  // This is not an actual type.
+       return false;
+@@ -331,6 +335,8 @@ bool GetDeletionPreferenceFromDataType(
+ 
+ BrowsingDataType GetDataTypeFromDeletionPreference(
+     const std::string& pref_name) {
++  if (pref_name == prefs::kDeleteShieldsSettings)
++    return BrowsingDataType::SHIELDS_SETTINGS;
+   using DataTypeMap = base::flat_map<std::string, BrowsingDataType>;
+   static base::NoDestructor<DataTypeMap> preference_to_datatype(
+       std::initializer_list<DataTypeMap::value_type>{

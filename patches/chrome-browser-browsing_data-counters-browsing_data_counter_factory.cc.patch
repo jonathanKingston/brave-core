@@ -1,0 +1,12 @@
+diff --git a/chrome/browser/browsing_data/counters/browsing_data_counter_factory.cc b/chrome/browser/browsing_data/counters/browsing_data_counter_factory.cc
+index 69fa7f2435f014c540cf4997f7105b65cfbd9617..0cf685010d9917644052f6af663a68c4c2ef4032 100644
+--- a/chrome/browser/browsing_data/counters/browsing_data_counter_factory.cc
++++ b/chrome/browser/browsing_data/counters/browsing_data_counter_factory.cc
+@@ -125,6 +125,6 @@ BrowsingDataCounterFactory::GetForProfileAndPref(Profile* profile,
+     return std::make_unique<HostedAppsCounter>(profile);
+   }
+ #endif
+-
++  HANDLE_BRAVE_PREFS
+   return nullptr;
+ }
