@@ -1,0 +1,52 @@
+diff --git a/chrome/test/base/testing_browser_process.h b/chrome/test/base/testing_browser_process.h
+index c5c2365f9871eaf1ca8b78c81da1d88eece6eba7..88d7478024f6c84c685404c4e4538cc86820090f 100644
+--- a/chrome/test/base/testing_browser_process.h
++++ b/chrome/test/base/testing_browser_process.h
+@@ -18,12 +18,16 @@
+ #include "base/macros.h"
+ #include "base/memory/ref_counted.h"
+ #include "build/build_config.h"
++#include "brave/browser/brave_browser_process_impl.h"
+ #include "chrome/browser/browser_process.h"
+ #include "chrome/browser/browser_process_platform_part.h"
+ #include "extensions/buildflags/buildflags.h"
+ #include "media/media_buildflags.h"
+ #include "printing/buildflags/buildflags.h"
+ 
++#include "chrome/browser/startup_data.h"
++#include "base/test/task_environment.h"
++
+ class BackgroundModeManager;
+ class NotificationPlatformBridge;
+ class NotificationUIManager;
+@@ -56,7 +60,7 @@ namespace resource_coordinator {
+ class ResourceCoordinatorParts;
+ }
+ 
+-class TestingBrowserProcess : public BrowserProcess {
++class TestingBrowserProcess : public BraveBrowserProcessImpl {
+  public:
+   // Initializes |g_browser_process| with a new TestingBrowserProcess.
+   static void CreateInstance();
+@@ -115,6 +119,8 @@ class TestingBrowserProcess : public BrowserProcess {
+   DownloadStatusUpdater* download_status_updater() override;
+   DownloadRequestLimiter* download_request_limiter() override;
+   StartupData* startup_data() override;
++  std::unique_ptr<StartupData> startup_data_;
++  std::unique_ptr<base::test::TaskEnvironment> task_environment_;
+ 
+ #if (defined(OS_WIN) || defined(OS_LINUX)) && !defined(OS_CHROMEOS)
+   void StartAutoupdateTimer() override {}
+@@ -160,10 +166,10 @@ class TestingBrowserProcess : public BrowserProcess {
+ 
+  private:
+   // See CreateInstance() and DestoryInstance() above.
+-  TestingBrowserProcess();
++  TestingBrowserProcess(std::unique_ptr<base::test::TaskEnvironment> task_environment, std::unique_ptr<StartupData> startup_data);
+   ~TestingBrowserProcess() override;
+ 
+-  void Init();
++  void Init() override;
+ 
+   std::unique_ptr<content::NotificationService> notification_service_;
+   std::string app_locale_;

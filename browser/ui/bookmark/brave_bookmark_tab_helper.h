@@ -13,7 +13,9 @@ class BookmarkTabHelperObserver;
 
 // This proxies BookmarkTabHelper apis that used by Browser.
 class BraveBookmarkTabHelper
-    : public content::WebContentsUserData<BraveBookmarkTabHelper>{
+    : public content::WebContentsUserData<BraveBookmarkTabHelper>,
+      public bookmarks::BaseBookmarkModelObserver,
+      public content::WebContentsObserver {
  public:
   ~BraveBookmarkTabHelper() override;
 
@@ -22,11 +24,13 @@ class BraveBookmarkTabHelper
   void RemoveObserver(BookmarkTabHelperObserver* observer);
 
  private:
+  void BookmarkModelChanged() override;
+
   friend class content::WebContentsUserData<BraveBookmarkTabHelper>;
 
   explicit BraveBookmarkTabHelper(content::WebContents* web_contents);
 
-  content::WebContents* web_contents_;
+  base::ObserverList<BookmarkTabHelperObserver>::Unchecked observers_;
 
   WEB_CONTENTS_USER_DATA_KEY_DECL();
 

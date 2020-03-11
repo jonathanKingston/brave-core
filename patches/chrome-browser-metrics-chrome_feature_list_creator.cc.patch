@@ -1,0 +1,12 @@
+diff --git a/chrome/browser/metrics/chrome_feature_list_creator.cc b/chrome/browser/metrics/chrome_feature_list_creator.cc
+index b14b36d349ecde122e3a28ace8b6b90d69184064..786daef83c9ff8352787a652c2b4436060a2a253 100644
+--- a/chrome/browser/metrics/chrome_feature_list_creator.cc
++++ b/chrome/browser/metrics/chrome_feature_list_creator.cc
+@@ -116,6 +116,7 @@ void ChromeFeatureListCreator::CreatePrefService() {
+       std::make_unique<policy::ChromeBrowserPolicyConnector>();
+ #endif  // defined(OS_CHROMEOS)
+ 
++fprintf(stderr, "create pref serv\n");
+   local_state_ = chrome_prefs::CreateLocalState(
+       local_state_file, browser_policy_connector_->GetPolicyService(),
+       std::move(pref_registry), false, browser_policy_connector_.get());

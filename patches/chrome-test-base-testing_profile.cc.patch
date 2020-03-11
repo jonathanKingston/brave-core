@@ -1,8 +1,19 @@
 diff --git a/chrome/test/base/testing_profile.cc b/chrome/test/base/testing_profile.cc
-index 5c546cc9d766ac7c8c94a222d3ac5f1bc7d738bd..e4022ad4fa0d6132ac7deee4376118491a417872 100644
+index 5c546cc9d766ac7c8c94a222d3ac5f1bc7d738bd..1499b343f52051b7a24ab4a676b0b89ff3f8c8e3 100644
 --- a/chrome/test/base/testing_profile.cc
 +++ b/chrome/test/base/testing_profile.cc
-@@ -414,6 +414,7 @@ void TestingProfile::Init() {
+@@ -163,6 +163,10 @@
+ #include "components/offline_pages/core/stub_offline_page_model.h"
+ #endif
+ 
++#if defined(BRAVE_CHROMIUM_BUILD)
++#include "brave/browser/brave_profile_prefs.h"
++#endif
++
+ using base::Time;
+ using bookmarks::BookmarkModel;
+ using content::BrowserThread;
+@@ -414,6 +418,7 @@ void TestingProfile::Init() {
        EnsureBrowserContextKeyedServiceFactoriesBuilt();
  
  #if BUILDFLAG(ENABLE_SUPERVISED_USERS)

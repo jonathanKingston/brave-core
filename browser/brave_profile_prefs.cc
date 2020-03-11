@@ -155,6 +155,9 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
   registry->RegisterBooleanPref(kBraveEnabledMediaRouter,
       FeatureSwitch::load_media_router_component_extension()->IsEnabled());
 #endif
+}
+
+void OverrideDefaultProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
 
   // Restore last profile on restart
   registry->SetDefaultPrefValue(

@@ -621,6 +621,7 @@ void RewardsServiceImpl::OnLoad(SessionID tab_id, const GURL& url) {
 }
 
 void RewardsServiceImpl::OnUnload(SessionID tab_id) {
+fprintf(stderr, "onunload");
   if (!Connected())
     return;
 

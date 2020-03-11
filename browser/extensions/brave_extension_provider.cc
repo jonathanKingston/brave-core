@@ -33,7 +33,7 @@ bool IsBlacklisted(const extensions::Extension* extension) {
                 extension->id()) != blacklisted_extensions.end())
     return true;
 
-  return g_brave_browser_process->extension_whitelist_service()->IsBlacklisted(
+  return g_brave_browser_process && g_brave_browser_process->extension_whitelist_service()->IsBlacklisted(
       extension->id());
 }
 

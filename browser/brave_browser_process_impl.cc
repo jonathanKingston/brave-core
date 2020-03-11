@@ -189,9 +189,11 @@ void BraveBrowserProcessImpl::StartBraveServices() {
 }
 
 brave_shields::AdBlockService* BraveBrowserProcessImpl::ad_block_service() {
+fprintf(stderr, "got here! %p\n", this);
   if (ad_block_service_)
     return ad_block_service_.get();
 
+fprintf(stderr, "got here2!\n");
   ad_block_service_ =
       brave_shields::AdBlockServiceFactory(brave_component_updater_delegate());
   return ad_block_service_.get();

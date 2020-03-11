@@ -1,0 +1,58 @@
+diff --git a/chrome/test/base/testing_browser_process.cc b/chrome/test/base/testing_browser_process.cc
+index 916d1931a60a24454ead4e78d52184c75ea4e9b8..d74a7b3e2f42288c23b86bc2f240a0f5f01e50ab 100644
+--- a/chrome/test/base/testing_browser_process.cc
++++ b/chrome/test/base/testing_browser_process.cc
+@@ -62,6 +62,8 @@
+ #include "components/keep_alive_registry/keep_alive_registry.h"
+ #endif
+ 
++#include "chrome/browser/metrics/chrome_feature_list_creator.h"
++
+ // static
+ TestingBrowserProcess* TestingBrowserProcess::GetGlobal() {
+   return static_cast<TestingBrowserProcess*>(g_browser_process);
+@@ -70,11 +72,17 @@ TestingBrowserProcess* TestingBrowserProcess::GetGlobal() {
+ // static
+ void TestingBrowserProcess::CreateInstance() {
+   DCHECK(!g_browser_process);
+-  TestingBrowserProcess* process = new TestingBrowserProcess;
++  std::unique_ptr<base::test::TaskEnvironment> task_environment = std::make_unique<base::test::TaskEnvironment>();
++  std::unique_ptr<StartupData> startup_data = std::make_unique<StartupData>();
++  auto* chrome_feature_list_creator =
++      startup_data->chrome_feature_list_creator();
++  chrome_feature_list_creator->CreateFeatureList();
++  TestingBrowserProcess* process = new TestingBrowserProcess(std::move(task_environment), std::move(startup_data));
+   // Set |g_browser_process| before initializing the TestingBrowserProcess
+   // because some members may depend on |g_browser_process| (in particular,
+   // ChromeExtensionsBrowserClient).
+   g_browser_process = process;
++  g_brave_browser_process = process;
+   process->Init();
+ }
+ 
+@@ -86,10 +94,13 @@ void TestingBrowserProcess::DeleteInstance() {
+   delete browser_process;
+ }
+ 
+-TestingBrowserProcess::TestingBrowserProcess()
+-    : notification_service_(content::NotificationService::Create()),
++TestingBrowserProcess::TestingBrowserProcess(std::unique_ptr<base::test::TaskEnvironment> task_environment, std::unique_ptr<StartupData> startup_data)
++    : BraveBrowserProcessImpl(startup_data.get()),
++      task_environment_(std::move(task_environment)),
++      notification_service_(content::NotificationService::Create()),
+       app_locale_("en"),
+-      platform_part_(new TestingBrowserProcessPlatformPart()) {}
++      platform_part_(new TestingBrowserProcessPlatformPart()) {
++}
+ 
+ TestingBrowserProcess::~TestingBrowserProcess() {
+   EXPECT_FALSE(local_state_);
+@@ -196,7 +207,7 @@ variations::VariationsService* TestingBrowserProcess::variations_service() {
+ }
+ 
+ StartupData* TestingBrowserProcess::startup_data() {
+-  return nullptr;
++  return startup_data_.get();
+ }
+ 
+ policy::ChromeBrowserPolicyConnector*

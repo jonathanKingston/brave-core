@@ -1,0 +1,12 @@
+diff --git a/chrome/browser/browser_process_impl.cc b/chrome/browser/browser_process_impl.cc
+index 554dacc43ed2f32345f8ec7d462654e8a09e39a3..f65f087b6ca57ae3b8258d802057824ef0e5687a 100644
+--- a/chrome/browser/browser_process_impl.cc
++++ b/chrome/browser/browser_process_impl.cc
+@@ -1080,6 +1080,7 @@ void BrowserProcessImpl::CreateProfileManager() {
+ void BrowserProcessImpl::CreateLocalState() {
+   DCHECK(!local_state_);
+ 
++fprintf(stderr, "beep %p\n", chrome_feature_list_creator_);
+   local_state_ = chrome_feature_list_creator_->TakePrefService();
+   DCHECK(local_state_);
+ }

@@ -118,4 +118,8 @@ void RewardsServiceFactory::Observe(
 #endif
 }
 
+bool RewardsServiceFactory::ServiceIsCreatedWithBrowserContext() const {
+  return true;
+}
+
 }  // namespace brave_rewards

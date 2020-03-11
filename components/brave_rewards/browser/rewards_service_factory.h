@@ -43,6 +43,7 @@ class RewardsServiceFactory : public BrowserContextKeyedServiceFactory,
   void Observe(int type,
                const content::NotificationSource& source,
                const content::NotificationDetails& details) override;
+  bool ServiceIsCreatedWithBrowserContext() const override;
 
   content::NotificationRegistrar registrar_;
 

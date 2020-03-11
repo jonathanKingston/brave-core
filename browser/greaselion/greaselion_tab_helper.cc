@@ -22,12 +22,16 @@ namespace greaselion {
 
 GreaselionTabHelper::GreaselionTabHelper(content::WebContents* web_contents)
     : WebContentsObserver(web_contents) {
-  download_service_ = g_brave_browser_process->greaselion_download_service();
-  download_service_->AddObserver(this);
+  if (g_brave_browser_process) {
+    download_service_ = g_brave_browser_process->greaselion_download_service();
+    download_service_->AddObserver(this);
+  }
 }
 
 GreaselionTabHelper::~GreaselionTabHelper() {
-  download_service_->RemoveObserver(this);
+  if (download_service_) {
+    download_service_->RemoveObserver(this);
+  }
 }
 
 void GreaselionTabHelper::OnRulesReady(

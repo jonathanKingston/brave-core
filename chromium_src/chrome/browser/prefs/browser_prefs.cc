@@ -16,7 +16,9 @@
 #endif
 
 #define MigrateObsoleteProfilePrefs MigrateObsoleteProfilePrefs_ChromiumImpl
+#define RegisterUserProfilePrefs RegisterUserProfilePrefs_ChromiumImpl
 #include "../../../../chrome/browser/prefs/browser_prefs.cc"  // NOLINT
+#undef RegisterUserProfilePrefs
 #undef MigrateObsoleteProfilePrefs
 
 #if BUILDFLAG(BRAVE_WALLET_ENABLED)
@@ -24,6 +26,17 @@
 #include "extensions/browser/extension_prefs.h"
 #include "brave/browser/brave_wallet/brave_wallet_utils.h"
 #endif
+
+void RegisterUserProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
+  RegisterUserProfilePrefs_ChromiumImpl(registry);
+  brave::RegisterProfilePrefs(registry);
+  brave::OverrideDefaultProfilePrefs(registry);
+}
+
+void RegisterUserProfilePrefs(user_prefs::PrefRegistrySyncable* registry,
+                              const std::string& locale) {
+  RegisterUserProfilePrefs_ChromiumImpl(registry, locale);
+}
 
 // This method should be periodically pruned of year+ old migrations.
 void MigrateObsoleteProfilePrefs(Profile* profile) {
